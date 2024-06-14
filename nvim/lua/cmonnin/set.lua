@@ -16,3 +16,6 @@ vim.opt.wrap = false
 vim.opt.termguicolors = true
 -- keeps cursor in the middle of the screen when scrolling
 vim.o.scrolloff = 999
+
+-- sync clipboard between OS and nvim
+vim.opt.clipboard = "unnamedplus"

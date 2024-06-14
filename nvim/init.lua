@@ -1,5 +1,6 @@
 require("cmonnin")
 require("cmonnin.lazy")
+
 function Transparent_bg(color)
 	color = color or "gruvbox"
 	success, msg = pcall(vim.cmd, "colorscheme " .. color)
