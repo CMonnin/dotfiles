@@ -1,13 +1,13 @@
 -- in normal mode, leader pv will go to Explore :Ex
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "project view" })
 -- navigate buffers
-vim.keymap.set("n", "<leader>h", vim.cmd.bp)
-vim.keymap.set("n", "<leader>l", vim.cmd.bn)
+vim.keymap.set("n", "<leader>h", vim.cmd.bp, { desc = "buffer, previous" })
+vim.keymap.set("n", "<leader>l", vim.cmd.bn, { desc = "buffer, next" })
 -- in insert mode jj Escapes to normal mode
 vim.keymap.set("i", "jj", "<Esc>")
 
 -- map "replace all"
-vim.keymap.set("n", "<leader>s", ":%s/g<Left>")
+vim.keymap.set("n", "<leader>s", ":%s/g<Left>", { desc = "replace all" })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows

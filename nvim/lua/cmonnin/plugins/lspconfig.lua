@@ -101,6 +101,11 @@ return {
 			on_attach = on_attach,
 		})
 
+		lspconfig["eslint"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+		})
+
 		-- configure css server
 		lspconfig["cssls"].setup({
 			capabilities = capabilities,
@@ -114,7 +119,7 @@ return {
 		})
 
 		-- configure svelte server
-		lspconfig["svelte"].setup({
+		--[[ lspconfig["svelte"].setup({
 			capabilities = capabilities,
 			on_attach = function(client, bufnr)
 				on_attach(client, bufnr)
@@ -128,7 +133,7 @@ return {
 					end,
 				})
 			end,
-		})
+		}) ]]
 
 		-- configure prisma orm server
 		lspconfig["prismals"].setup({
