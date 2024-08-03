@@ -1,3 +1,4 @@
 return {
-	{ "ellisonleao/gruvbox.nvim", priority = 1000 },
+  { 'sainnhe/gruvbox-material', priority = 1000 },
+  { "ellisonleao/gruvbox.nvim", priority = 500 },
 }
