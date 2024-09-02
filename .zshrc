@@ -18,6 +18,7 @@ bindkey -v
 # End of lines configured by zsh-newuser-install
 
 # Alias
+alias cd='z'
 alias c="clear"
 alias ls="ls --color=auto"
 alias ll="ls -l"
@@ -25,12 +26,13 @@ alias la="ls -a"
 alias sp='systemctl suspend'
 
 # plugins
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # starship
 eval "$(starship init zsh)"
+
 
 # pnpm
 export PNPM_HOME="/home/cian/.local/share/pnpm"
@@ -39,3 +41,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+#
+# zoxide
+eval "$(zoxide init zsh)"
