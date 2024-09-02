@@ -17,7 +17,7 @@ config.keys = {
     action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' }
   }
 }
-config.font = wezterm.font('JetBrains Mono')
+config.font = wezterm.font('JetBrainsMono NL Nerd Font Mono')
 config.dpi = 96
 config.color_scheme = 'Gruvbox Material (Gogh)'
 config.window_decorations = "RESIZE"
