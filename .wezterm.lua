@@ -13,9 +13,79 @@ config.keys = {
   },
   {
     mods   = "LEADER",
-    key    = "|",
+    key    = [[|]],
     action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' }
-  }
+  },
+  -- movement and resizing
+  {
+    key = "h",
+    mods = "LEADER",
+    action = wezterm.action.ActivatePaneDirection("Left"),
+  },
+  {
+    key = "l",
+    mods = "LEADER",
+    action = wezterm.action.ActivatePaneDirection("Right"),
+  },
+  {
+    key = "k",
+    mods = "LEADER",
+    action = wezterm.action.ActivatePaneDirection("Up"),
+  },
+  {
+    key = "j",
+    mods = "LEADER",
+    action = wezterm.action.ActivatePaneDirection("Down"),
+  },
+  {
+    key = "LeftArrow",
+    mods = "LEADER",
+    action = wezterm.action.AdjustPaneSize({ "Left", 5 }),
+  },
+  {
+    key = "DownArrow",
+    mods = "LEADER",
+    action = wezterm.action.AdjustPaneSize({ "Down", 5 }),
+  },
+  {
+    key = "UpArrow",
+    mods = "LEADER",
+    action = wezterm.action.AdjustPaneSize({ "Up", 5 }),
+  },
+  {
+    key = "RightArrow",
+    mods = "LEADER",
+    action = wezterm.action.AdjustPaneSize({ "Right", 5 }),
+  },
+  -- panes navigation
+  {
+    key = 'c',
+    mods = 'LEADER',
+    action = wezterm.action.SpawnTab 'CurrentPaneDomain',
+  },
+  -- Leader p to go to previous tab
+  {
+    key = 'p',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateTabRelative(-1),
+  },
+  -- Leader n to go to next tab
+  {
+    key = 'n',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateTabRelative(1),
+  },
+  {
+    key = 'w',
+    mods = 'CTRL',
+    action = wezterm.action.CloseCurrentPane({ confirm = false })
+  },
+  {
+    key = ' ',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateCommandPalette
+  },
+
 }
 config.font = wezterm.font('JetBrainsMono NL Nerd Font Mono')
 config.dpi = 96
