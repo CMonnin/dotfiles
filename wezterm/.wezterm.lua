@@ -76,11 +76,6 @@ config.keys = {
     action = wezterm.action.ActivateTabRelative(1),
   },
   {
-    key = 'w',
-    mods = 'CTRL',
-    action = wezterm.action.CloseCurrentPane({ confirm = false })
-  },
-  {
     key = ' ',
     mods = 'LEADER',
     action = wezterm.action.ActivateCommandPalette
