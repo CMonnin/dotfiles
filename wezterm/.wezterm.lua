@@ -1,5 +1,4 @@
 local wezterm = require 'wezterm'
-
 local config = wezterm.config_builder()
 
 -- Leader is the same as my old tmux prefix
@@ -82,7 +81,28 @@ config.keys = {
   },
 
 }
-config.font = wezterm.font('JetBrainsMono NL Nerd Font Mono')
+config.font = wezterm.font_with_fallback {
+  {
+    family = 'JetBrainsMonoNL Nerd Font Mono',
+    weight = 'Medium',
+  },
+  'Noto Color Emoji',
+}
+
+config.font_rules = {
+  {
+    intensity = 'Bold',
+    font = wezterm.font_with_fallback {
+      {
+        family = 'JetBrainsMonoNL Nerd Font Mono',
+        weight = 'Black',
+      },
+      'Noto Color Emoji',
+    },
+  },
+}
+
+
 config.dpi = 96
 config.color_scheme = 'Gruvbox Material (Gogh)'
 config.window_decorations = "RESIZE"
