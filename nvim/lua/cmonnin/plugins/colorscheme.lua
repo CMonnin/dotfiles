@@ -5,10 +5,12 @@ return {
     priority = 1000,
     config = function()
       vim.opt.background = 'dark'
+
       vim.cmd.colorscheme('gruvbox-material')
 
       vim.api.nvim_create_user_command('ToggleBackground', function()
         if vim.o.background == 'dark' then
+          vim.o.background = 'light'
         else
           vim.o.background = 'dark'
         end
