@@ -4,8 +4,8 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      vim.g.gruvbox_material_background = 'soft'
       vim.opt.background = 'dark'
-
       vim.cmd.colorscheme('gruvbox-material')
 
       vim.api.nvim_create_user_command('ToggleBackground', function()

@@ -2,7 +2,7 @@ require("cmonnin")
 require("cmonnin.lazy")
 
 function Transparent_bg(color)
-  color = color or "gruvbox-material"
+  color = color or "gruvbox"
   success, msg = pcall(vim.cmd, "colorscheme " .. color)
   if not success then
     print("Failed to load color scheme '" .. color .. "': " .. msg)
