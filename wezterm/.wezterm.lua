@@ -12,7 +12,7 @@ config.keys = {
   },
   {
     mods   = "LEADER",
-    key    = [[|]],
+    key    = "\\",
     action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' }
   },
   -- movement and resizing
@@ -84,7 +84,7 @@ config.keys = {
 config.font = wezterm.font_with_fallback {
   {
     family = 'JetBrainsMonoNL Nerd Font Mono',
-    weight = 'Medium',
+    weight = 'Light',
   },
   'Noto Color Emoji',
 }
@@ -95,7 +95,7 @@ config.font_rules = {
     font = wezterm.font_with_fallback {
       {
         family = 'JetBrainsMonoNL Nerd Font Mono',
-        weight = 'Black',
+        weight = 'Bold',
       },
       'Noto Color Emoji',
     },
@@ -104,6 +104,6 @@ config.font_rules = {
 
 
 config.dpi = 96
-config.color_scheme = 'Gruvbox Material (Gogh)'
+config.color_scheme = 'Gruvbox Dark (Gogh)'
 config.window_decorations = "RESIZE"
 return config
