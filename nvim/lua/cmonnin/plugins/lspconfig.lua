@@ -79,9 +79,31 @@ return {
 
     -- configure python server
     --  doesn't work for some reason
+    -- configure python servers
     lspconfig["pyright"].setup({
-      --			capabilities = capabilities,
-      --			on_attach = on_attach,
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = "basic",
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = "workspace",
+          },
+        },
+      },
+    })
+
+    -- configure ruff-lsp
+    lspconfig["ruff_lsp"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      init_options = {
+        settings = {
+          -- Ruff settings if needed
+        }
+      }
     })
 
     -- configure rust server
@@ -130,21 +152,21 @@ return {
     }) ]]
 
     -- configure svelte server
-    lspconfig["svelte"].setup({
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
+    --[[ lspconfig["svelte"].setup({
+			capabilities = capabilities,
+			on_attach = function(client, bufnr)
+				on_attach(client, bufnr)
 
-        vim.api.nvim_create_autocmd("BufWritePost", {
-          pattern = { "*.js", "*.ts" },
-          callback = function(ctx)
-            if client.name == "svelte" then
-              client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
-            end
-          end,
-        })
-      end,
-    })
+				vim.api.nvim_create_autocmd("BufWritePost", {
+					pattern = { "*.js", "*.ts" },
+					callback = function(ctx)
+						if client.name == "svelte" then
+							client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
+						end
+					end,
+				})
+			end,
+		}) ]]
 
     -- configure prisma orm server
     lspconfig["prismals"].setup({

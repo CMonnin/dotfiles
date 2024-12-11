@@ -17,7 +17,7 @@ return {
         yaml = { "prettier" },
         markdown = { "prettier" },
         lua = { "stylua" },
-        python = { "isort", "ruff_lsp" },
+        python = { "isort", "ruff" },
         rust = { "rustfmt" },
       },
       format_on_save = {

@@ -2,7 +2,7 @@ return {
   {
     'sainnhe/gruvbox-material',
     lazy = false,
-    priority = 500,
+    priority = 1000,
     config = function()
       vim.g.gruvbox_material_background = 'soft'
       vim.opt.background = 'dark'
@@ -20,5 +20,5 @@ return {
         { noremap = true, silent = true, desc = "Toggle light/dark mode" })
     end,
   },
-  { "ellisonleao/gruvbox.nvim", priority = 1000 },
+  { "ellisonleao/gruvbox.nvim", priority = 500 },
 }

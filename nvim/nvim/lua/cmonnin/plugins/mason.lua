@@ -25,7 +25,7 @@ return {
       -- list of servers for mason to install
       ensure_installed = {
         "pyright",
-        "ruff_lsp",
+        "ruff-lsp",
         "gopls",
         "eslint",
         "rust_analyzer",
