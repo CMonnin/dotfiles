@@ -3,6 +3,7 @@
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' matcher-list ''
 zstyle :compinstall filename '/home/cian/.zshrc'
+
 # commented out the following two lines b/c of the fzf plugin
 autoload -Uz compinit
 compinit
@@ -17,17 +18,17 @@ bindkey -v
 # End of lines configured by zsh-newuser-install
 
 # Alias
+alias cd='z'
 alias c="clear"
 alias ls="ls --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
 alias sp='systemctl suspend'
-alias cd='z'
 
 # plugins
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # starship
 eval "$(starship init zsh)"
@@ -50,7 +51,7 @@ eval "$(thefuck --alias fuck)"
 
 if ! pgrep -x "picom" > /dev/null
 then
-  picom --backend -glx --config ~/.config/picom/picom.conf -b &
+  picom -b 
 fi
 
 export NVM_DIR="$HOME/.nvm"
