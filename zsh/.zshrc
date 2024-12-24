@@ -31,12 +31,10 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # starship
 eval "$(starship init zsh)"
-# zoxide
-eval "$(zoxide init zsh)"
+
 # fzf
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
-
 # pnpm
 export PNPM_HOME="/home/cian/.local/share/pnpm"
 case ":$PATH:" in
@@ -44,3 +42,17 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+#
+# zoxide
+eval "$(zoxide init zsh)"
+
+eval "$(thefuck --alias fuck)"
+
+if ! pgrep -x "picom" > /dev/null
+then
+  picom --backend -glx --config ~/.config/picom/picom.conf -b &
+fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
