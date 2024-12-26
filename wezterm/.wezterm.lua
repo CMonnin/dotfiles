@@ -106,4 +106,5 @@ config.font_rules = {
 config.dpi = 96
 config.color_scheme = 'Gruvbox Dark (Gogh)'
 config.window_decorations = "RESIZE"
+config.window_background_opacity = 0.8
 return config
