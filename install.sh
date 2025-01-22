@@ -17,7 +17,7 @@ cp -r ./picom/ ~/.config/
 echo "✓ Picom configuration copied"
 
 echo "Copying starship configuration..."
-cp -r ./startship/ ~/.config/
+cp -r ./starship/starship.toml ~/.config/
 echo "✓ Starship configuration copied"
 
 echo "Copying wezterm configuration..."
