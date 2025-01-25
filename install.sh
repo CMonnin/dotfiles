@@ -8,6 +8,8 @@ echo "Copying i3 configuration..."
 cp -r ./i3 ~/.config/
 echo "✓ i3 configuration copied"
 
+echo "Removing current nvim config..."
+rm -rf ~/.config/nvim/
 echo "Copying nvim configuration..."
 cp -r ./nvim ~/.config/
 echo "✓ Neovim configuration copied"
@@ -36,7 +38,6 @@ if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
   if [ -f "$image_path" ]; then
     echo "exec --no-startup-id feh --bg-scale $image_path" >> ~/.zshrc
     echo "Background has been changed."
-    echo "Source your .zshrc to apply the changes."
   else 
     echo "File does not exist."
     exit 1
@@ -48,5 +49,8 @@ fi
 echo "Copying .zshrc configuration..."
 cp ./zsh/.zshrc ~
 echo "✓ .zshrc configuration copied"
+
+echo "Sourcing .zshrc"
+source ~.zshrc
 
 echo "All configurations have been successfully copied!"
