@@ -27,6 +27,7 @@ return {
 					"gitignore",
 					"rust",
 					"python",
+					"groovy",
 				},
 				-- auto install above language parsers
 				auto_install = true,
