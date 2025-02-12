@@ -17,42 +17,8 @@ return {
 
 		-- import cmp-nvim-lsp plugin
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		-- Define the custom server configuration for Nextflow
-		local configs = require("lspconfig.configs")
 		-- used to enable autocompletion (assign to every lsp server config)
 		local capabilities = cmp_nvim_lsp.default_capabilities()
-
-		if not configs.nextflow then
-			configs.nextflow = {
-				default_config = {
-					cmd = { "java", "-jar", "/home/cian/nextflow_ls/language-server-all.jar" },
-					filetypes = { "nextflow", "nf" },
-					root_dir = lspconfig.util.root_pattern(".git", "nextflow.config"),
-					single_file_support = true,
-					settings = {
-						nextflow = {
-							trace = {
-								server = true,
-							},
-						},
-					},
-				},
-			}
-		end
-
-		-- Setup Nextflow LSP
-		lspconfig.nextflow.setup({
-			capabilities = capabilities,
-			on_attach = function(client, bufnr)
-				-- Your existing keymaps will be handled by the main LspAttach autocmd
-
-				-- Set filetype-specific options
-				vim.api.nvim_buf_set_option(bufnr, "commentstring", "//%s")
-
-				-- Print debug information
-				vim.notify("Nextflow LSP attached to buffer: " .. bufnr, vim.log.levels.INFO)
-			end,
-		})
 
 		local keymap = vim.keymap -- for conciseness
 
