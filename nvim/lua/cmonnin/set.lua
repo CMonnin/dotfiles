@@ -25,3 +25,11 @@ vim.opt.undofile = true
 -- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+-- set list for displaying whitepsace etc
+vim.opt.list = true
+vim.opt.listchars = {
+	space = "·",
+	tab = "→ ",
+	trail = "·",
+}

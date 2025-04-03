@@ -18,6 +18,7 @@ return {
 		mason_lspconfig.setup({
 			-- list of servers for mason to install
 			ensure_installed = {
+				"bashls",
 				"svelte",
 				"pyright",
 				"ruff",
@@ -33,6 +34,7 @@ return {
 				"lua_ls",
 				"graphql",
 				"groovy-language-server",
+				--				"nextflow-language-server",
 			},
 			-- auto-install configured servers (with lspconfig)
 			automatic_installation = true, -- not the same as ensure_installed

@@ -22,6 +22,26 @@ return {
 
 		local keymap = vim.keymap -- for conciseness
 
+		-- Set up Nextflow LSP custom configuration
+		local configs = require("lspconfig.configs")
+
+		if not configs.nextflow_ls then
+			configs.nextflow_ls = {
+				default_config = {
+					cmd = { vim.fn.stdpath("data") .. "/mason/bin/nextflow-language-server" },
+					filetypes = { "nextflow" },
+					root_dir = lspconfig.util.root_pattern("nextflow.config", ".git"),
+					settings = {
+						nextflow = {
+							files = {
+								exclude = { ".git", ".nf-test", "work" },
+							},
+						},
+					},
+				},
+			}
+		end
+
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
@@ -78,9 +98,14 @@ return {
 					capabilities = capabilities,
 				})
 			end,
-			["ruff_lsp"] = function()
+			["bashls"] = function()
+				lspconfig["bashls"].setup({
+					capabilities = capabilities,
+				})
+			end,
+			["ruff"] = function()
 				-- configure ruff language server
-				lspconfig["ruff_lsp"].setup({
+				lspconfig["ruff"].setup({
 					capabilities = capabilities,
 					filetypes = { "python" },
 					settings = {
@@ -88,7 +113,6 @@ return {
 					},
 				})
 			end,
-
 			["pyright"] = function()
 				-- configure pyright server
 				lspconfig["pyright"].setup({
@@ -162,6 +186,11 @@ return {
 					},
 				})
 			end,
+		})
+
+		-- Set up the Nextflow language server outside the mason handlers
+		lspconfig.nextflow_ls.setup({
+			capabilities = capabilities,
 		})
 	end,
 }
