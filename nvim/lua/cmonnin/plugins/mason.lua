@@ -22,7 +22,6 @@ return {
 				"svelte",
 				"pyright",
 				"ruff",
-				"ruff_lsp",
 				"gopls",
 				"eslint",
 				"rust_analyzer",
@@ -34,13 +33,14 @@ return {
 				"lua_ls",
 				"graphql",
 				"groovy-language-server",
-				--				"nextflow-language-server",
+				"nextflow_ls",
 			},
 			-- auto-install configured servers (with lspconfig)
 			automatic_installation = true, -- not the same as ensure_installed
 		})
 		mason_tool_installer.setup({
 			ensure_installed = {
+				"shellcheck",
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
 				"isort", -- python formatter
