@@ -12,15 +12,12 @@ vim.keymap.set("n", "<leader>l", vim.cmd.bn, { desc = "buffer, next" })
 vim.keymap.set("n", "<leader>s", ":%s/g<Left>", { desc = "replace all" })
 
 vim.pack.add({
-	{ src = "ellisonleao/gruvbox.nvim" },
-})
-vim.pack.add({
-	{ src = "https://github.com/vague2k/vague.nvim" },
+
+	{ src = "https://github.com/ellisonleao/gruvbox.nvim" },
+	{ src = "https://github.com/numToStr/Comment.nvim" },
 	{ src = "https://github.com/echasnovski/mini.pick" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-	{ src = "https://github.com/chomosuke/typst-preview.nvim" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
-	{ src = "https://github.com/NvChad/showkeys", opt = true },
 })
 
 vim.lsp.enable({
