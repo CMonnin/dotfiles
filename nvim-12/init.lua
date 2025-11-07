@@ -7,6 +7,9 @@ vim.filetype.add({
 	extension = {
 		nf = 'nextflow',
 	},
+	filename = {
+		['nextflow.config'] = 'nextflow',
+	},
 })
 
 -- Use Groovy treesitter parser for Nextflow files
