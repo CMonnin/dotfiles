@@ -14,5 +14,5 @@ vim.lsp.enable({
 	"lua_ls",
 	"graphql",
 	"groovyls",
-	"nexflow_ls",
+	"nextflow_ls",
 })
