@@ -21,26 +21,25 @@ return {
 				"bashls",
 				"svelte",
 				"pyright",
-				"ruff",
-				"gopls",
 				"eslint",
 				"rust_analyzer",
 				"dockerls",
+				"ruff",
 				"ts_ls",
 				"html",
 				"cssls",
 				"tailwindcss",
 				"lua_ls",
 				"graphql",
-				"groovy-language-server",
-				"nextflow_ls",
+				"groovyls",
+				--				"nextflow-language-server",
 			},
 			-- auto-install configured servers (with lspconfig)
 			automatic_installation = true, -- not the same as ensure_installed
+			automatic_enable = true,
 		})
 		mason_tool_installer.setup({
 			ensure_installed = {
-				"shellcheck",
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
 				"isort", -- python formatter
