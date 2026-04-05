@@ -71,13 +71,21 @@ extract() {
 
 # Git info for prompt
 git_info() {
-    local branch status indicators
+    local branch status indicators ahead behind
     branch=$(git branch --show-current 2>/dev/null) || return
     status=$(git status --porcelain 2>/dev/null)
     [[ "$status" == *"?"*  ]] && indicators+="?"
     [[ "$status" =~ (^|$'\n')[\ MADRCU]M ]] && indicators+="!"
     [[ "$status" =~ (^|$'\n')[\ MADRCU]D ]] && indicators+="✘"
     [[ -n $(git stash list 2>/dev/null) ]] && indicators+="\$"
+    local ab
+    ab=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
+    if [[ -n "$ab" ]]; then
+        ahead=${ab%%$'\t'*}
+        behind=${ab##*$'\t'}
+        [[ "$ahead" -gt 0 ]] && indicators+="↑${ahead}"
+        [[ "$behind" -gt 0 ]] && indicators+="↓${behind}"
+    fi
     [[ -n "$indicators" ]] && indicators=" $indicators"
     echo " (${branch}${indicators})"
 }
@@ -85,14 +93,14 @@ git_info() {
 # Show user@host only over SSH
 prompt_user() {
     [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && \
-        printf '\001\e[38;2;69;133;136m\002%s@%s\001\e[0m\002 ' "$USER" "$HOSTNAME"
+        printf '\001\e[38;2;177;98;134m\002%s@%s\001\e[0m\002 ' "$USER" "$HOSTNAME"
 }
 
 # Show time only when not in ~
 prompt_time() {
     [[ "$PWD" != "$HOME" ]] && \
-        printf ' \001\e[38;2;69;133;136m\002%s\001\e[0m\002' "$(date +%H:%M)"
+        printf '\001\e[38;2;177;98;134m\002%s\001\e[0m\002 ' "$(date +%H:%M)"
 }
 
-# Prompt — Gruvbox: yellow path, green git branch, blue time (not in ~), user@host (SSH only)
-PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n → '
+# Prompt — Gruvbox: yellow path, green git branch, purple time (not in ~), user@host (SSH only)
+PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n\[\e[38;2;215;153;33m\] →\[\e[0m\] '
