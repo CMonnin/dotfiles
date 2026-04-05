@@ -1,6 +1,17 @@
 return {
 	{
 		"mfussenegger/nvim-dap",
+		keys = {
+			{ "<space>b", desc = "dap: toggle_breakpoint" },
+			{ "<space>gb", desc = "dap: run_to_cursor" },
+			{ "<space>?", desc = "dap: eval" },
+			{ "<F1>", desc = "dap: continue" },
+			{ "<F2>", desc = "dap: step_into" },
+			{ "<F3>", desc = "dap: step_over" },
+			{ "<F4>", desc = "dap: step_out" },
+			{ "<F5>", desc = "dap: step_back" },
+			{ "<F13>", desc = "dap: restart" },
+		},
 		dependencies = {
 			"mfussenegger/nvim-dap-python",
 			--"leoluz/nvim-dap-go",

@@ -1,5 +1,3 @@
--- source https://www.youtube.com/watch?v=6pAG3BHurdM&t=400s
-
 return {
 	"neovim/nvim-lspconfig",
 	event = { "BufReadPre", "BufNewFile" },
@@ -8,39 +6,14 @@ return {
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 		{ "folke/lazydev.nvim", opts = {} },
 	},
+
 	config = function()
-		-- import lspconfig plugin
-		local lspconfig = require("lspconfig")
-
-		-- import mason_lspconfig plugin
-		local mason_lspconfig = require("mason-lspconfig")
-
-		-- import cmp-nvim-lsp plugin
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		-- used to enable autocompletion (assign to every lsp server config)
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
+		vim.lsp.config("*", { capabilities = capabilities })
+
 		local keymap = vim.keymap -- for conciseness
-
-		-- Set up Nextflow LSP custom configuration
-		local configs = require("lspconfig.configs")
-
-		if not configs.nextflow_ls then
-			configs.nextflow_ls = {
-				default_config = {
-					cmd = { vim.fn.stdpath("data") .. "/mason/bin/nextflow-language-server" },
-					filetypes = { "nextflow" },
-					root_dir = lspconfig.util.root_pattern("nextflow.config", ".git"),
-					settings = {
-						nextflow = {
-							files = {
-								exclude = { ".git", ".nf-test", "work" },
-							},
-						},
-					},
-				},
-			}
-		end
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -78,10 +51,10 @@ return {
 				keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
 
 				opts.desc = "Go to previous diagnostic"
-				keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+				keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, opts)
 
 				opts.desc = "Go to next diagnostic"
-				keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
+				keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, opts)
 
 				opts.desc = "Show documentation for what is under cursor"
 				keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
@@ -89,108 +62,6 @@ return {
 				opts.desc = "Restart LSP"
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 			end,
-		})
-
-		mason_lspconfig.setup_handlers({
-			-- default handler for installed servers
-			function(server_name)
-				lspconfig[server_name].setup({
-					capabilities = capabilities,
-				})
-			end,
-			["bashls"] = function()
-				lspconfig["bashls"].setup({
-					capabilities = capabilities,
-				})
-			end,
-			["ruff"] = function()
-				-- configure ruff language server
-				lspconfig["ruff"].setup({
-					capabilities = capabilities,
-					filetypes = { "python" },
-					settings = {
-						-- Any specific settings for ruff
-					},
-				})
-			end,
-			["pyright"] = function()
-				-- configure pyright server
-				lspconfig["pyright"].setup({
-					capabilities = capabilities,
-					settings = {
-						python = {
-							analysis = {
-								typeCheckingMode = "basic",
-								diagnosticMode = "workspace",
-								inlayHints = {
-									variableTypes = true,
-									functionReturnTypes = true,
-								},
-							},
-						},
-					},
-				})
-			end,
-			["svelte"] = function()
-				-- configure svelte server
-				lspconfig["svelte"].setup({
-					capabilities = capabilities,
-					on_attach = function(client, bufnr)
-						vim.api.nvim_create_autocmd("BufWritePost", {
-							pattern = { "*.js", "*.ts" },
-							callback = function(ctx)
-								-- Here use ctx.match instead of ctx.file
-								client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
-							end,
-						})
-					end,
-				})
-			end,
-			["graphql"] = function()
-				-- configure graphql language server
-				lspconfig["graphql"].setup({
-					capabilities = capabilities,
-					filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-				})
-			end,
-			["emmet_ls"] = function()
-				-- configure emmet language server
-				lspconfig["emmet_ls"].setup({
-					capabilities = capabilities,
-					filetypes = {
-						"html",
-						"typescriptreact",
-						"javascriptreact",
-						"css",
-						"sass",
-						"scss",
-						"less",
-						"svelte",
-					},
-				})
-			end,
-			["lua_ls"] = function()
-				-- configure lua server (with special settings)
-				lspconfig["lua_ls"].setup({
-					capabilities = capabilities,
-					settings = {
-						Lua = {
-							-- make the language server recognize "vim" global
-							diagnostics = {
-								globals = { "vim" },
-							},
-							completion = {
-								callSnippet = "Replace",
-							},
-						},
-					},
-				})
-			end,
-		})
-
-		-- Set up the Nextflow language server outside the mason handlers
-		lspconfig.nextflow_ls.setup({
-			capabilities = capabilities,
 		})
 	end,
 }

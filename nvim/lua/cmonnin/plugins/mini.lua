@@ -1,5 +1,6 @@
 return { -- Collection of various small independent plugins/modules
 	"echasnovski/mini.nvim",
+	event = "VeryLazy",
 	config = function()
 		require("mini.pairs").setup()
 		-- Better Around/Inside textobjects
