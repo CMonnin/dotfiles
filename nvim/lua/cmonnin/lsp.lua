@@ -1,6 +1,7 @@
 vim.lsp.enable({
 	"lua_ls",
 	"bashls",
+	"r_languageserver",
 	"svelte",
 	"pyright",
 	"eslint",

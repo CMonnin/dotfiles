@@ -4,53 +4,37 @@ echo "Copying fastfetch configuration..."
 cp -r ./fastfetch ~/.config/
 echo "✓ Fastfetch configuration copied"
 
-echo "Copying i3 configuration..."
-cp -r ./i3 ~/.config/
-echo "✓ i3 configuration copied"
-
 echo "Removing current nvim config..."
 rm -rf ~/.config/nvim/
 echo "Copying nvim configuration..."
 cp -r ./nvim ~/.config/
 echo "✓ Neovim configuration copied"
 
+echo "Copying alacritty configuration..."
+cp -r ./alacritty ~/.config/
+echo "✓ alacritty configuration copied"
+
 echo "Copying picom configuration..."
 cp -r ./picom/ ~/.config/
 echo "✓ Picom configuration copied"
 
-echo "Copying starship configuration..."
-cp -r ./starship/starship.toml ~/.config/
-echo "✓ Starship configuration copied"
+echo "Copying bspwm configuration..."
+cp -r ./bspwm ~/.config/
+echo "✓ bspwm configuration copied"
 
-echo "Copying wezterm configuration..."
-cp ./wezterm/.wezterm.lua ~
-echo "✓ Wezterm configuration copied"
+echo "Copying sxhkd configuration..."
+cp -r ./sxhkd ~/.config/
+echo "✓ sxhkd configuration copied"
 
-echo "Change background (y/n)"
-read answer
+echo "Copying polybar configuration..."
+cp -r ./polybar ~/.config/
+echo "✓ polybar configuration copied"
 
-if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-  echo "Please enter path"
-  read image_path
+echo "Copying .bashrc configuration..."
+cp ./bash/bashrc ~/.bashrc
+echo "✓ .bashrc configuration copied"
 
-  image_path="${image_path/#\~/$HOME}"
-
-  if [ -f "$image_path" ]; then
-    echo "exec --no-startup-id feh --bg-scale $image_path" >> ~/.zshrc
-    echo "Background has been changed."
-  else 
-    echo "File does not exist."
-    exit 1
-  fi
-else
-  echo "No changes made."
-fi
-
-echo "Copying .zshrc configuration..."
-cp ./zsh/.zshrc ~
-echo "✓ .zshrc configuration copied"
-
-echo "Sourcing .zshrc"
-source ~.zshrc
+echo "Sourcing .bashrc"
+source ~/.bashrc
 
 echo "All configurations have been successfully copied!"

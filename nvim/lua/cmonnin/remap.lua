@@ -13,6 +13,10 @@ vim.keymap.set("x", "<C-b>", "g<C-a>")
 -- map "replace all"
 vim.keymap.set("n", "<leader>s", ":%s/g<Left>", { desc = "replace all" })
 
+-- Quickfix navigation
+vim.keymap.set("n", "]q", "<cmd>cnext<CR>", { desc = "Next quickfix item" })
+vim.keymap.set("n", "[q", "<cmd>cprev<CR>", { desc = "Prev quickfix item" })
+
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
