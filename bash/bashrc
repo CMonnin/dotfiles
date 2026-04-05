@@ -75,6 +75,7 @@ git_info() {
     branch=$(git branch --show-current 2>/dev/null) || return
     status=$(git status --porcelain 2>/dev/null)
     [[ "$status" == *"?"*  ]] && indicators+="?"
+    [[ "$status" =~ (^|$'\n')[MADRCU] ]] && indicators+="+"
     [[ "$status" =~ (^|$'\n')[\ MADRCU]M ]] && indicators+="!"
     [[ "$status" =~ (^|$'\n')[\ MADRCU]D ]] && indicators+="✘"
     [[ -n $(git stash list 2>/dev/null) ]] && indicators+="\$"
@@ -83,8 +84,8 @@ git_info() {
     if [[ -n "$ab" ]]; then
         ahead=${ab%%$'\t'*}
         behind=${ab##*$'\t'}
-        [[ "$ahead" -gt 0 ]] && indicators+="↑${ahead}"
-        [[ "$behind" -gt 0 ]] && indicators+="↓${behind}"
+        [[ "$ahead" -gt 0 ]] && indicators+="↑"
+        [[ "$behind" -gt 0 ]] && indicators+="↓"
     fi
     [[ -n "$indicators" ]] && indicators=" $indicators"
     echo " (${branch}${indicators})"
