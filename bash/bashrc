@@ -95,4 +95,4 @@ prompt_time() {
 }
 
 # Prompt — Gruvbox: yellow path, green git branch, blue time (not in ~), user@host (SSH only)
-PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\] → '
+PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n → '
