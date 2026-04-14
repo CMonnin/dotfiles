@@ -33,3 +33,7 @@ vim.opt.listchars = {
 	tab = "→ ",
 	trail = "·",
 }
+
+vim.filetype.add({ extension = { nf = "nextflow" } })
+
+vim.opt.foldlevelstart = 99
