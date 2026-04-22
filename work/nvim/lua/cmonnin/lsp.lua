@@ -1,0 +1,18 @@
+vim.lsp.enable({
+	"lua_ls",
+	"bashls",
+	"r_languageserver",
+	"svelte",
+	"pyright",
+	"eslint",
+	"rust_analyzer",
+	"dockerls",
+	"ruff",
+	"ts_ls",
+	"html",
+	"cssls",
+	"tailwindcss",
+	"graphql",
+	"groovyls",
+	"nextflow_ls",
+})

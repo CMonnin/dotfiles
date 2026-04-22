@@ -1,0 +1,113 @@
+[[ $- != *i* ]] && return
+
+# History
+HISTFILE=~/.bash_history
+HISTSIZE=-1
+HISTFILESIZE=-1
+HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+
+# Vi mode
+set -o vi
+
+# Completion
+[[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
+
+# Aliases
+alias c="clear"
+alias ls="ls --color=auto"
+alias grep="grep --color=auto"
+alias ll="ls -l"
+alias la="ls -a"
+alias sp='systemctl suspend'
+alias zkw="cd ~/Documents/notes/work && zk"
+alias zkp="cd ~/Documents/notes/personal && zk"
+alias vim='nvim'
+alias ssh_work="ssh -J moncia@gateway.douglasneuroinformatics.ca:46572 moncia@dnpws14"
+alias moondrop='bluetoothctl connect 25:09:23:B6:62:61'
+
+# PNPM
+export PNPM_HOME="/home/cian/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+# bun completions are zsh-only, skip in bash
+
+# NVM (lazy)
+export NVM_DIR="$HOME/.nvm"
+nvm() {
+    unset -f nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm "$@"
+}
+
+# Zoxide
+eval "$(zoxide init bash)"
+
+# FZF
+eval "$(fzf --bash)"
+
+. "$HOME/.local/bin/env"
+
+extract() {
+    case "$1" in
+        *.tar.gz)  tar xzf "$1" ;;
+        *.tar.bz2) tar xjf "$1" ;;
+        *.zip)     unzip "$1" ;;
+        *.7z)      7z x "$1" ;;
+        *.tar.xz)  tar xJf "$1" ;;
+        *.tar)     tar xf "$1" ;;
+        *.gz)      gunzip "$1" ;;
+        *.rar)     unrar x "$1" ;;
+        *)         echo "unknown format: $1" ;;
+    esac
+}
+
+# Git info for prompt
+git_info() {
+    local branch status indicators ahead behind
+    branch=$(git branch --show-current 2>/dev/null) || return
+    status=$(git status --porcelain 2>/dev/null)
+    [[ "$status" == *"?"*  ]] && indicators+="?"
+    [[ "$status" =~ (^|$'\n')[MADRCU] ]] && indicators+="+"
+    [[ "$status" =~ (^|$'\n')[\ MADRCU]M ]] && indicators+="!"
+    [[ "$status" =~ (^|$'\n')[\ MADRCU]D ]] && indicators+="✘"
+    [[ -n $(git stash list 2>/dev/null) ]] && indicators+="\$"
+    local ab
+    ab=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
+    if [[ -n "$ab" ]]; then
+        ahead=${ab%%$'\t'*}
+        behind=${ab##*$'\t'}
+        [[ "$ahead" -gt 0 ]] && indicators+="↑"
+        [[ "$behind" -gt 0 ]] && indicators+="↓"
+    fi
+    [[ -n "$indicators" ]] && indicators=" $indicators"
+    echo " (${branch}${indicators})"
+}
+
+# Show user@host only over SSH
+prompt_user() {
+    [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && \
+        printf '\001\e[38;2;177;98;134m\002%s@%s\001\e[0m\002 ' "$USER" "$HOSTNAME"
+}
+
+# Show time only when not in ~
+prompt_time() {
+    [[ "$PWD" != "$HOME" ]] && \
+        printf '\001\e[38;2;177;98;134m\002%s\001\e[0m\002 ' "$(date +%H:%M)"
+}
+
+# Prompt — Gruvbox: yellow path, green git branch, purple time (not in ~), user@host (SSH only)
+PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n\[\e[38;2;215;153;33m\] →\[\e[0m\] '
+
+
+# SSH background tint
+if [[ -n "$SSH_CONNECTION" ]]; then
+    echo -ne '\033]11;#200000\007'
+fi

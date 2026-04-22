@@ -1,40 +1,74 @@
-#! /bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "Copying fastfetch configuration..."
-cp -r ./fastfetch ~/.config/
-echo "✓ Fastfetch configuration copied"
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <host>"
+    exit 1
+fi
 
-echo "Removing current nvim config..."
-rm -rf ~/.config/nvim/
-echo "Copying nvim configuration..."
-cp -r ./nvim ~/.config/
-echo "✓ Neovim configuration copied"
+DOTFILES="$(cd "$(dirname "$0")" && pwd)"
+HOST="$1"
+HOSTDIR="$DOTFILES/$HOST"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-echo "Copying alacritty configuration..."
-cp -r ./alacritty ~/.config/
-echo "✓ alacritty configuration copied"
+if [ ! -d "$HOSTDIR" ]; then
+    echo "ERROR: unknown host '$HOST'"
+    echo "Available: $(ls -d "$DOTFILES"/*/ 2>/dev/null | xargs -n1 basename | tr '\n' ' ')"
+    exit 1
+fi
+ERRORS=()
 
-echo "Copying picom configuration..."
-cp -r ./picom/ ~/.config/
-echo "✓ Picom configuration copied"
+link() {
+    local src="$HOSTDIR/$1"
+    local dest="$CONFIG/$1"
 
-echo "Copying bspwm configuration..."
-cp -r ./bspwm ~/.config/
-echo "✓ bspwm configuration copied"
+    if [ ! -d "$src" ]; then
+        echo "SKIP: $1 — source directory does not exist"
+        return 1
+    fi
 
-echo "Copying sxhkd configuration..."
-cp -r ./sxhkd ~/.config/
-echo "✓ sxhkd configuration copied"
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+        echo "ERROR: $1 — $dest already exists"
+        ERRORS+=("$1")
+        return 1
+    fi
 
-echo "Copying polybar configuration..."
-cp -r ./polybar ~/.config/
-echo "✓ polybar configuration copied"
+    ln -s "$src" "$dest"
+    echo "OK: $1 → $dest"
+}
 
-echo "Copying .bashrc configuration..."
-cp ./bash/bashrc ~/.bashrc
-echo "✓ .bashrc configuration copied"
+copy_file() {
+    local src="$HOSTDIR/$1"
+    local dest="$2"
 
-echo "Sourcing .bashrc"
-source ~/.bashrc
+    if [ ! -f "$src" ]; then
+        echo "SKIP: $src — file does not exist"
+        return 1
+    fi
 
-echo "All configurations have been successfully copied!"
+    cp "$src" "$dest"
+    echo "OK: $src → $dest"
+}
+
+echo "Symlinking $HOST configurations into $CONFIG ..."
+
+link alacritty
+link bspwm
+link fastfetch
+link nvim
+link picom
+link polybar
+link sxhkd
+
+copy_file bash/bashrc "$HOME/.bashrc"
+
+if [ ${#ERRORS[@]} -gt 0 ]; then
+    echo ""
+    echo "Failed — the following targets already existed:"
+    printf '  - %s\n' "${ERRORS[@]}"
+    echo "Remove or rename them, then re-run."
+    exit 1
+fi
+
+echo ""
+echo "Done. All configurations symlinked."

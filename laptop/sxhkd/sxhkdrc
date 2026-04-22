@@ -1,0 +1,136 @@
+# Terminal
+super + Return
+    alacritty
+
+# Screenshot (region)
+super + shift + s
+    flameshot gui
+
+# Screenshot (full screen)
+super + Print
+    flameshot full --clipboard
+
+# Launcher
+super + d
+    dmenu_run -nb "#282828" -nf "#ebdbb2" -sb "#d79921" -sf "#282828"
+
+# Close focused window
+super + shift + q
+    bspc node -c
+
+# Lock screen
+super + Escape
+    i3lock -c 000000
+
+# Reload sxhkd config
+super + shift + c
+    pkill -USR1 -x sxhkd
+
+# Restart bspwm
+super + shift + r
+    bspc wm -r
+
+# Quit bspwm
+super + shift + e
+    bspc quit
+
+
+#
+# Focus / Move
+#
+
+# Focus node in direction (vim-like)
+super + {h,j,k,l}
+    bspc node -f {west,south,north,east}
+
+# Arrow key focus
+super + {Left,Down,Up,Right}
+    bspc node -f {west,south,north,east}
+
+# Move node in direction (vim-like)
+super + shift + {h,j,k,l}
+    bspc node -s {west,south,north,east}
+
+# Arrow key move
+super + shift + {Left,Down,Up,Right}
+    bspc node -s {west,south,north,east}
+
+# Focus last node / desktop
+super + space
+    bspc node -f last
+
+
+#
+# State / Flags
+#
+
+# Toggle fullscreen
+super + f
+    bspc node -t ~fullscreen
+
+# Toggle floating
+super + shift + space
+    bspc node -t ~floating
+
+# Toggle monocle layout (like tabbed/stacking)
+super + m
+    bspc desktop -l next
+
+# Focus parent
+super + a
+    bspc node -f @parent
+
+# Set split direction (preselect)
+super + ctrl + {h,j,k,l}
+    bspc node -p {west,south,north,east}
+
+# Cancel preselection
+super + ctrl + space
+    bspc node -p cancel
+
+
+#
+# Resize (chord: press super+r, then hjkl)
+#
+
+super + r : {h,j,k,l}
+    bspc node -z {left -20 0, bottom 0 20, top 0 -20, right 20 0}
+
+super + r : Escape
+    :
+
+
+#
+# Workspaces
+#
+
+# Switch to workspace
+super + {1-9,0}
+    bspc desktop -f ^{1-9,10}
+
+# Move node to workspace
+super + shift + {1-9,0}
+    bspc node -d ^{1-9,10}
+
+
+#
+# Media keys
+#
+
+XF86AudioRaiseVolume
+    pactl set-sink-volume @DEFAULT_SINK@ +10%
+
+XF86AudioLowerVolume
+    pactl set-sink-volume @DEFAULT_SINK@ -10%
+
+XF86AudioMute
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+XF86AudioMicMute
+    pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+XF86MonBrightnessUp
+    brightnessctl set +5%
+
+XF86MonBrightnessDown
+    brightnessctl set 5%-
