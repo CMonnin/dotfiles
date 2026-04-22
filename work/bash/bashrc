@@ -10,6 +10,15 @@ shopt -s histappend
 # Vi mode
 set -o vi
 
+
+if [[ -e "/scratch/moncia/nvim.appimage" ]]; then
+  		alias nvim="/scratch/moncia/nvim.appimage"
+  		alias vim="/scratch/moncia/nvim.appimage"
+  else
+  	alias nvim="~/nvim.appimage"
+  	alias vim="~/nvim.appimage"
+fi
+
 # Completion
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
@@ -51,9 +60,9 @@ nvm() {
 eval "$(zoxide init bash)"
 
 # FZF
-eval "$(fzf --bash)"
+# eval "$(fzf --bash)"
 
-. "$HOME/.local/bin/env"
+# . "$HOME/.local/bin/env"
 
 extract() {
     case "$1" in
