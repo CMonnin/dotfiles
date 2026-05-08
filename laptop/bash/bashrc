@@ -50,10 +50,6 @@ nvm() {
 # Zoxide
 eval "$(zoxide init bash)"
 
-# FZF
-eval "$(fzf --bash)"
-
-. "$HOME/.local/bin/env"
 
 extract() {
     case "$1" in
@@ -94,14 +90,50 @@ git_info() {
 # Show user@host only over SSH
 prompt_user() {
     [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && \
-        printf '\001\e[38;2;177;98;134m\002%s@%s\001\e[0m\002 ' "$USER" "$HOSTNAME"
+        if [[ "$LIGHTSCREEN" == "1" ]]; then
+            printf '\001\e[38;2;124;111;100m\002%s@%s\001\e[0m\002' "$USER" "$HOSTNAME"
+        else
+            printf '\001\e[38;2;177;98;134m\002%s@%s\001\e[0m\002' "$USER" "$HOSTNAME"
+        fi
 }
 
 # Show time only when not in ~
 prompt_time() {
     [[ "$PWD" != "$HOME" ]] && \
-        printf '\001\e[38;2;177;98;134m\002%s\001\e[0m\002 ' "$(date +%H:%M)"
+        if [[ "$LIGHTSCREEN" == "1" ]]; then
+            printf '\001\e[38;2;124;111;100m\002%s\001\e[0m\002 ' "$(date +%H:%M)"
+        else
+            printf '\001\e[38;2;177;98;134m\002%s\001\e[0m\002 ' "$(date +%H:%M)"
+        fi
 }
 
-# Prompt — Gruvbox: yellow path, green git branch, purple time (not in ~), user@host (SSH only)
-PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n\[\e[38;2;215;153;33m\] →\[\e[0m\] '
+# Prompt colors — adapt to lightscreen mode
+if [[ "$LIGHTSCREEN" == "1" ]]; then
+    # Gruvbox Light: faded yellow path, faded green git
+    PS1='$(prompt_time)$(prompt_user)\[\e[38;2;181;87;20m\]\w\[\e[0m\]\[\e[38;2;121;116;14m\]$(git_info)\[\e[0m\]\n\[\e[38;2;181;87;20m\] →\[\e[0m\] '
+else
+    # Dark mode — Gruvbox: yellow path, green git branch
+    PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n\[\e[38;2;215;153;33m\] →\[\e[0m\] '
+fi
+
+
+# FZF
+source /usr/share/fzf/completion.bash
+source /usr/share/fzf/key-bindings.bash
+
+# Lightscreen env — picks up mode from toggle script
+[[ -f "$HOME/.config/lightscreen-env" ]] && source "$HOME/.config/lightscreen-env"
+
+# claude
+export PATH="$HOME/.local/bin:$PATH"
+
+
+# opencode
+export PATH=/home/cian/.opencode/bin:$PATH
+# pnpm
+export PNPM_HOME="/home/cian/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

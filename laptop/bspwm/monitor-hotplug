@@ -1,0 +1,19 @@
+#!/bin/sh
+# Invoked by udev (as root) on DRM hotplug events.
+# Detaches from udev's RUN slot, debounces event bursts with flock,
+# then re-executes screenlayout.sh as the X session user.
+# Refs:
+#   https://wiki.archlinux.org/title/Xrandr#Automatic_display_configuration_with_udev
+#   https://wiki.archlinux.org/title/Udev
+
+export DISPLAY=:0
+export XAUTHORITY=/home/cian/.Xauthority
+
+LOCK=/tmp/monitor-hotplug.lock
+
+(
+    flock -n 9 || exit 0
+    # Let the kernel/Xserver settle so xrandr sees the new state
+    sleep 0.5
+    runuser -u cian -- /home/cian/.config/bspwm/screenlayout.sh
+) 9>"$LOCK" </dev/null >/dev/null 2>&1 &

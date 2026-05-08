@@ -3,8 +3,14 @@
 # Restart sxhkd on bspwm reload
 pgrep -x sxhkd > /dev/null || sxhkd &
 
-# Desktops (10 workspaces)
-bspc monitor -d 1 2 3 4 5 6 7 8 9 10
+# start pipewire (auto-spawns wireplumber + pipewire-pulse via /etc/pipewire/pipewire.conf.d/)
+pgrep -x pipewire >/dev/null || pipewire &
+
+# Monitors + desktops: split 1-5 on internal, 6-10 on external when attached.
+# Hotplug re-invokes the same script via the udev rule in
+# /etc/udev/rules.d/95-monitor-hotplug.rules.
+# https://wiki.archlinux.org/title/Bspwm#Multiple_monitors
+"$HOME/.config/bspwm/screenlayout.sh"
 
 # Layout
 bspc config split_ratio          0.52
@@ -29,13 +35,13 @@ bspc config presel_feedback_color  "#458588"  # blue
 
 # Autostart
 setxkbmap -option "ctrl:nocaps" &
-feh --bg-scale "/home/cian/Pictures/wallpapers/40k-battlefleet-gothic.jpg" &
-nm-applet &
+feh --bg-scale "/home/cian/Pictures/wallpapers/gruuvy-desert-3840x2160.png" &
 xss-lock --transfer-sleep-lock -- i3lock --nofork &
 dex --autostart --environment bspwm &
 
 # picom 
 picom --config ~/.config/picom/picom.conf --daemon &
 
-# Bar
-polybar main &
+# Bar is launched from screenlayout.sh so it spawns a bar per connected monitor
+# and is re-run together with the layout on hotplug.
+# https://github.com/polybar/polybar/wiki/Configuration#running-polybar-on-multiple-monitors

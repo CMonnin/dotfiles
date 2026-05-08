@@ -1,0 +1,4 @@
+# Re-run the bspwm screen layout script whenever a DRM output is
+# plugged in or out. Install to /etc/udev/rules.d/95-monitor-hotplug.rules.
+# Ref: https://wiki.archlinux.org/title/Xrandr#Automatic_display_configuration_with_udev
+ACTION=="change", SUBSYSTEM=="drm", RUN+="/home/cian/.config/bspwm/monitor-hotplug"

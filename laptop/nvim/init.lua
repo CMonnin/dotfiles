@@ -11,6 +11,12 @@ function Transparent_bg(color)
 		return
 	end
 
+	-- In lightscreen mode, keep opaque backgrounds for outdoor readability
+	if os.getenv('LIGHTSCREEN') then
+		vim.o.background = 'light'
+		return
+	end
+
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
