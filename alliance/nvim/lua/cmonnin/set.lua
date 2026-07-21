@@ -17,6 +17,15 @@ vim.opt.termguicolors = true
 -- keeps cursor in the middle of the screen when scrolling
 vim.opt.scrolloff = 999
 
+-- ...except in diff mode, where centering the cursor fights scrollbind and
+-- the two panes drift out of alignment.
+vim.api.nvim_create_autocmd("OptionSet", {
+	pattern = "diff",
+	callback = function()
+		vim.wo.scrolloff = vim.wo.diff and 0 or 999
+	end,
+})
+
 -- sync clipboard between OS and nvim
 vim.opt.clipboard = "unnamedplus"
 

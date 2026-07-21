@@ -9,9 +9,10 @@ return {
 				vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
 			end
 
-			-- Diff in a split (HEAD on the left), then ]c / [c to navigate and do to revert a hunk
-			map("n", "<leader>gd", function() gs.diffthis() end, "Git diff vs HEAD")
-			map("n", "<leader>gD", function() gs.diffthis("~") end, "Git diff vs HEAD~")
+			-- Diff in a split: current buffer stays left, old version opens right.
+			-- Then ]c / [c to navigate and do to revert a hunk.
+			map("n", "<leader>gd", function() gs.diffthis(nil, { split = "belowright" }) end, "Git diff vs HEAD")
+			map("n", "<leader>gD", function() gs.diffthis("~", { split = "belowright" }) end, "Git diff vs HEAD~")
 
 			map("n", "<leader>gp", gs.preview_hunk, "Git preview hunk")
 			map("n", "<leader>gl", function() gs.blame_line({ full = true }) end, "Git blame line")
