@@ -37,3 +37,7 @@ vim.opt.listchars = {
 vim.filetype.add({ extension = { nf = "nextflow" } })
 
 vim.opt.foldlevelstart = 99
+
+-- Diff mode forces foldmethod=diff, which collapses unchanged regions.
+-- Keep them open by treating 99 lines around each change as context.
+vim.opt.diffopt:append("context:99")

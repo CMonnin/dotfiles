@@ -69,6 +69,28 @@ extract() {
     esac
 }
 
+# Diff a file against its last committed version
+gd() {
+    git diff -- "$@"
+}
+
+# Discard a file's uncommitted changes, after showing them
+gundo() {
+    if [[ $# -eq 0 ]]; then
+        echo "gundo: need a path (refusing to restore the whole tree)" >&2
+        return 1
+    fi
+    git diff -- "$@" || return 1
+    if [[ -z $(git diff --name-only -- "$@") ]]; then
+        echo "gundo: no uncommitted changes in $*"
+        return 0
+    fi
+    local reply
+    read -r -p "Discard the above changes? [y/N] " reply
+    [[ "$reply" == [yY] ]] || { echo "aborted"; return 1; }
+    git restore -- "$@"
+}
+
 # Git info for prompt
 git_info() {
     local branch status indicators ahead behind
