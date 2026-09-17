@@ -30,12 +30,13 @@ magenta = "#d3869b"
 cyan    = "#8ec07c"
 white   = "#ebdbb2"
 [font.normal]
-family = "Terminus"
+family = "ShureTechMono Nerd Font Mono"
 style  = "Regular"
 
+# Share Tech Mono ships a single weight, so bold uses the same face
 [font.bold]
-family = "Terminus"
-style  = "Bold"
+family = "ShureTechMono Nerd Font Mono"
+style  = "Regular"
 
 [font]
 size = 12.0
