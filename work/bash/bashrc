@@ -155,3 +155,6 @@ if [[ -f ~/.vllm-creds ]]; then
     source ~/.command_code_api_key
 fi
 
+
+# Rust (rustup/cargo)
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
