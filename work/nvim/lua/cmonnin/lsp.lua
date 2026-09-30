@@ -1,7 +1,6 @@
 vim.lsp.enable({
 	"lua_ls",
 	"bashls",
-	"r_languageserver",
 	"svelte",
 	"pyright",
 	"eslint",
@@ -16,3 +15,8 @@ vim.lsp.enable({
 	"groovyls",
 	"nextflow_ls",
 })
+
+-- r-languageserver execs R, which comes from lmod; only enable it when `module load r` put R on PATH, or it crashes on every start
+if vim.fn.executable("R") == 1 then
+	vim.lsp.enable("r_language_server")
+end
