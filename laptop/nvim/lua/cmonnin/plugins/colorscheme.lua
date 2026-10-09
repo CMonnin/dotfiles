@@ -1,24 +1,19 @@
 return {
-  {
-    'sainnhe/gruvbox-material',
-    lazy = false,
-    priority = 500,
-    config = function()
-      vim.g.gruvbox_material_background = 'soft'
-      vim.opt.background = 'dark'
-      vim.cmd.colorscheme('gruvbox-material')
+	"ellisonleao/gruvbox.nvim",
+	lazy = false,
+	priority = 1000,
+	config = function()
+		-- In lightscreen mode, use light + opaque backgrounds for outdoor readability.
+		-- Otherwise transparent_mode lets the terminal background show through.
+		local lightscreen = os.getenv("LIGHTSCREEN") == "1"
+		require("gruvbox").setup({ transparent_mode = not lightscreen })
+		vim.o.background = lightscreen and "light" or "dark"
+		vim.cmd.colorscheme("gruvbox")
 
-      vim.api.nvim_create_user_command('ToggleBackground', function()
-        if vim.o.background == 'dark' then
-          vim.o.background = 'light'
-        else
-          vim.o.background = 'dark'
-        end
-      end, {})
+		vim.api.nvim_create_user_command("ToggleBackground", function()
+			vim.o.background = vim.o.background == "dark" and "light" or "dark"
+		end, {})
 
-      vim.keymap.set('n', '<leader>tb', ':ToggleBackground<CR>',
-        { noremap = true, silent = true, desc = "Toggle light/dark mode" })
-    end,
-  },
-  { "ellisonleao/gruvbox.nvim", priority = 1000 },
+		vim.keymap.set("n", "<leader>tb", "<cmd>ToggleBackground<CR>", { silent = true, desc = "Toggle light/dark mode" })
+	end,
 }

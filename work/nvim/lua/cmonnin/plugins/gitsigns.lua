@@ -17,7 +17,6 @@ return {
 			map("n", "<leader>gp", gs.preview_hunk, "Git preview hunk")
 			map("n", "<leader>gl", function() gs.blame_line({ full = true }) end, "Git blame line")
 
-			-- gb is nvim-dap run_to_cursor, so blame lives on gl
 			map("n", "<leader>gr", gs.reset_hunk, "Git reset hunk")
 			map("n", "<leader>gR", gs.reset_buffer, "Git reset buffer")
 
