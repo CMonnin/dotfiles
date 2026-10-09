@@ -22,15 +22,22 @@ link() {
     local src="$HOSTDIR/$1"
     local dest="$CONFIG/$1"
 
+    # Under set -e a non-zero return here would abort the whole run, so
+    # failures are recorded in ERRORS and reported at the end instead.
     if [ ! -d "$src" ]; then
         echo "SKIP: $1 — source directory does not exist"
-        return 1
+        return 0
+    fi
+
+    if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+        echo "OK: $1 → $dest (already linked)"
+        return 0
     fi
 
     if [ -e "$dest" ] || [ -L "$dest" ]; then
         echo "ERROR: $1 — $dest already exists"
         ERRORS+=("$1")
-        return 1
+        return 0
     fi
 
     ln -s "$src" "$dest"
@@ -43,12 +50,25 @@ copy_file() {
 
     if [ ! -f "$src" ]; then
         echo "SKIP: $src — file does not exist"
-        return 1
+        return 0
+    fi
+
+    if [ -f "$dest" ] && cmp -s "$src" "$dest"; then
+        echo "OK: $src → $dest (already up to date)"
+        return 0
+    fi
+
+    if [ -e "$dest" ]; then
+        local backup="$dest.bak.$(date +%Y%m%d%H%M%S)"
+        mv "$dest" "$backup"
+        echo "BACKUP: $dest → $backup"
     fi
 
     cp "$src" "$dest"
     echo "OK: $src → $dest"
 }
+
+mkdir -p "$CONFIG"
 
 echo "Symlinking $HOST configurations into $CONFIG ..."
 
@@ -64,7 +84,7 @@ copy_file bash/bashrc "$HOME/.bashrc"
 
 if [ ${#ERRORS[@]} -gt 0 ]; then
     echo ""
-    echo "Failed — the following targets already existed:"
+    echo "Incomplete — the following targets already existed:"
     printf '  - %s\n' "${ERRORS[@]}"
     echo "Remove or rename them, then re-run."
     exit 1
