@@ -36,7 +36,8 @@ return {
 			},
 			-- auto-install configured servers (with lspconfig)
 			automatic_installation = true, -- not the same as ensure_installed
-			automatic_enable = true,
+			-- R server is enabled conditionally in lsp.lua
+			automatic_enable = { exclude = { "r_language_server" } },
 		})
 		mason_tool_installer.setup({
 			ensure_installed = {

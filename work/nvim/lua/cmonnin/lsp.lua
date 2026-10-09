@@ -16,7 +16,8 @@ vim.lsp.enable({
 	"nextflow_ls",
 })
 
--- r-languageserver execs R, which comes from lmod; only enable it when `module load r` put R on PATH, or it crashes on every start
+-- r-languageserver execs R and crashes on every start without it, so only
+-- enable it when R is on PATH (on work, after `module load r` via lmod)
 if vim.fn.executable("R") == 1 then
 	vim.lsp.enable("r_language_server")
 end
