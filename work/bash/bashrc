@@ -154,7 +154,7 @@ if [[ -f ~/.vllm-creds ]]; then
     source ~/.vllm-creds
 fi
 
-if [[ -f ~/.vllm-creds ]]; then
+if [[ -f ~/.command_code_api_key ]]; then
     source ~/.command_code_api_key
 fi
 
