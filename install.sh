@@ -73,7 +73,7 @@ mkdir -p "$CONFIG"
 echo "Symlinking $HOST configurations into $CONFIG ..."
 
 # Each host carries only the configs it uses (alliance is just nvim + bash)
-for name in alacritty bspwm fastfetch nvim picom polybar sxhkd; do
+for name in alacritty bspwm fastfetch i3 nvim picom polybar sxhkd; do
     if [ -d "$HOSTDIR/$name" ]; then
         link "$name"
     fi
