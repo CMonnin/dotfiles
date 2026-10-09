@@ -2,13 +2,13 @@
 super + Return
     alacritty
 
-# Screenshot (region)
+# Screenshot (region) -> clipboard
 super + shift + s
-    flameshot gui
+    maim -s -u | xclip -selection clipboard -t image/png
 
-# Screenshot (full screen)
+# Screenshot (full screen) -> clipboard
 super + Print
-    flameshot full --clipboard
+    maim -u | xclip -selection clipboard -t image/png
 
 # Launcher
 super + d
