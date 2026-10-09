@@ -1,62 +1,32 @@
+# Cobralab shared bashrc. Sourced rather than symlinked (the lab's
+# `ln -sf ... ~/.bashrc`) so the additions below don't get written into the
+# shared file; lab updates are still picked up on every new shell.
+COBRALAB_BASHRC=/project/rrg-mchakrav-ab/gdevenyi/quarantine/cobralab-bashrc
+if [[ -r "$COBRALAB_BASHRC" ]]; then
+    . "$COBRALAB_BASHRC"
+elif [[ $- == *i* ]]; then
+    echo "bashrc: $COBRALAB_BASHRC not readable, skipping" >&2
+fi
+
+# Cian: environment, also needed by non-interactive shells (ssh host cmd, sbatch)
+export SLURM_ACCOUNT="rrg-mchakrav-ab"
+export PATH="$HOME/.local/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+export MANPATH="$HOME/.local/share/man:$MANPATH"
+
+# A `return` inside the lab file only leaves that file, so stop here for
+# non-interactive shells: printing escape codes would break scp/rsync.
 [[ $- != *i* ]] && return
 
-# History
-HISTFILE=~/.bash_history
-HISTSIZE=-1
-HISTFILESIZE=-1
-HISTCONTROL=ignoredups:erasedups
-shopt -s histappend
-
-# Vi mode
-set -o vi
-
-# Completion
-[[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
-
-# Dircolours
-eval "$(TERM=xterm-256color dircolors -b)"
-
-# Aliases
-alias c="clear"
-alias ls="ls --color=auto"
-alias grep="grep --color=auto"
-alias ll="ls -l"
-alias la="ls -a"
-alias sp='systemctl suspend'
-alias zkw="cd ~/Documents/notes/work && zk"
-alias zkp="cd ~/Documents/notes/personal && zk"
+# Cian: interactive
+alias ls='ls --color=auto'
 alias vim='nvim'
-alias ssh_work="ssh -J moncia@gateway.douglasneuroinformatics.ca:46572 moncia@dnpws14"
-alias moondrop='bluetoothctl connect 25:09:23:B6:62:61'
+export TERM=xterm-256color
+eval "$(~/.local/bin/starship init bash)"
 
-# PNPM
-export PNPM_HOME="/home/cian/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-# Bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-# bun completions are zsh-only, skip in bash
-
-# NVM (lazy)
-export NVM_DIR="$HOME/.nvm"
-nvm() {
-    unset -f nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    nvm "$@"
-}
-
-# Zoxide
-eval "$(zoxide init bash)"
-
-# FZF
-eval "$(fzf --bash)"
-
-. "$HOME/.local/bin/env"
+if [[ -n "$SSH_CONNECTION" ]]; then
+  echo -ne "\033]11;#200000\007"
+fi
 
 extract() {
     case "$1" in
@@ -71,68 +41,3 @@ extract() {
         *)         echo "unknown format: $1" ;;
     esac
 }
-
-# Diff a file against its last committed version
-gd() {
-    git diff -- "$@"
-}
-
-# Discard a file's uncommitted changes, after showing them
-gundo() {
-    if [[ $# -eq 0 ]]; then
-        echo "gundo: need a path (refusing to restore the whole tree)" >&2
-        return 1
-    fi
-    git diff -- "$@" || return 1
-    if [[ -z $(git diff --name-only -- "$@") ]]; then
-        echo "gundo: no uncommitted changes in $*"
-        return 0
-    fi
-    local reply
-    read -r -p "Discard the above changes? [y/N] " reply
-    [[ "$reply" == [yY] ]] || { echo "aborted"; return 1; }
-    git restore -- "$@"
-}
-
-# Git info for prompt
-git_info() {
-    local branch status indicators ahead behind
-    branch=$(git branch --show-current 2>/dev/null) || return
-    status=$(git status --porcelain 2>/dev/null)
-    [[ "$status" == *"?"*  ]] && indicators+="?"
-    [[ "$status" =~ (^|$'\n')[MADRCU] ]] && indicators+="+"
-    [[ "$status" =~ (^|$'\n')[\ MADRCU]M ]] && indicators+="!"
-    [[ "$status" =~ (^|$'\n')[\ MADRCU]D ]] && indicators+="✘"
-    [[ -n $(git stash list 2>/dev/null) ]] && indicators+="\$"
-    local ab
-    ab=$(git rev-list --left-right --count HEAD...@{u} 2>/dev/null)
-    if [[ -n "$ab" ]]; then
-        ahead=${ab%%$'\t'*}
-        behind=${ab##*$'\t'}
-        [[ "$ahead" -gt 0 ]] && indicators+="↑"
-        [[ "$behind" -gt 0 ]] && indicators+="↓"
-    fi
-    [[ -n "$indicators" ]] && indicators=" $indicators"
-    echo " (${branch}${indicators})"
-}
-
-# Show user@host only over SSH
-prompt_user() {
-    [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && \
-        printf '\001\e[38;2;177;98;134m\002%s@%s\001\e[0m\002 ' "$USER" "$HOSTNAME"
-}
-
-# Show time only when not in ~
-prompt_time() {
-    [[ "$PWD" != "$HOME" ]] && \
-        printf '\001\e[38;2;177;98;134m\002%s\001\e[0m\002 ' "$(date +%H:%M)"
-}
-
-# Prompt — Gruvbox: yellow path, green git branch, purple time (not in ~), user@host (SSH only)
-PS1='$(prompt_time)$(prompt_user)\[\e[38;2;215;153;33m\]\w\[\e[0m\]\[\e[38;2;152;151;26m\]$(git_info)\[\e[0m\]\n\[\e[38;2;215;153;33m\] →\[\e[0m\] '
-
-
-# SSH background tint
-if [[ -n "$SSH_CONNECTION" ]]; then
-    echo -ne '\033]11;#200000\007'
-fi
