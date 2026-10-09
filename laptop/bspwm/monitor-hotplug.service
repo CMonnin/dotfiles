@@ -1,0 +1,7 @@
+# Started by 95-monitor-hotplug.rules. Installed by install-hotplug.sh.
+[Unit]
+Description=Re-apply bspwm monitor layout after DRM hotplug
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/monitor-hotplug
