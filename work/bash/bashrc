@@ -22,6 +22,9 @@ fi
 # Completion
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
+# Dircolours
+eval "$(TERM=xterm-256color dircolors -b)"
+
 # Aliases
 alias c="clear"
 alias ls="ls --color=auto"
