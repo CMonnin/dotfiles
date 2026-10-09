@@ -2,6 +2,10 @@
 # `ln -sf ... ~/.bashrc`) so the additions below don't get written into the
 # shared file; lab updates are still picked up on every new shell.
 COBRALAB_BASHRC=/project/rrg-mchakrav-ab/gdevenyi/quarantine/cobralab-bashrc
+# Setting HISTFILESIZE truncates $HISTFILE on the spot, so if the lab file sets
+# it, ~/.bash_history would be cut down every shell before the unlimited
+# history below applies. With HISTFILE unset there's nothing to truncate.
+unset HISTFILE
 if [[ -r "$COBRALAB_BASHRC" ]]; then
     . "$COBRALAB_BASHRC"
 elif [[ $- == *i* ]]; then
@@ -23,6 +27,20 @@ export MANPATH="$HOME/.local/share/man:$MANPATH"
 [[ $- != *i* ]] && return
 
 # Cian: interactive
+
+# History (unlimited)
+HISTFILE=~/.bash_history
+HISTSIZE=-1
+HISTFILESIZE=-1
+HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+
+# Vi mode
+set -o vi
+
+# FZF (after vi mode, so its key bindings land in the vi keymaps)
+command -v fzf >/dev/null && eval "$(fzf --bash)"
+
 alias ls='ls --color=auto'
 alias vim='nvim'
 export TERM=xterm-256color
