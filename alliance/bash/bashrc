@@ -11,7 +11,11 @@ fi
 # Cian: environment, also needed by non-interactive shells (ssh host cmd, sbatch)
 export SLURM_ACCOUNT="rrg-mchakrav-ab"
 export PATH="$HOME/.local/bin:$PATH"
-export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+# An empty LD_LIBRARY_PATH element means the current directory, so only add
+# the separator when there's something to append to
+export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# Here the trailing empty element is wanted: it tells man to also search the
+# system manpath
 export MANPATH="$HOME/.local/share/man:$MANPATH"
 
 # A `return` inside the lab file only leaves that file, so stop here for
