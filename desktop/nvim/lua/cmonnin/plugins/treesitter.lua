@@ -4,28 +4,35 @@ return {
 	lazy = false,
 	build = ":TSUpdate",
 	config = function()
-		require("nvim-treesitter").install({
-			"bash",
-			"css",
-			"dockerfile",
-			"graphql",
-			"groovy",
-			"html",
-			"javascript",
-			"json",
-			"lua",
-			"markdown",
-			"markdown_inline",
-			"python",
-			"r",
-			"rust",
-			"svelte",
-			"tsx",
-			"typescript",
-			"vim",
-			"vimdoc",
-			"yaml",
-		})
+		-- The main branch builds parsers with the tree-sitter CLI. Without it every
+		-- start fails on each parser, so warn once and use the parsers bundled
+		-- with nvim instead (pacman -S tree-sitter-cli, or a binary in ~/.local/bin).
+		if vim.fn.executable("tree-sitter") == 1 then
+			require("nvim-treesitter").install({
+				"bash",
+				"css",
+				"dockerfile",
+				"graphql",
+				"groovy",
+				"html",
+				"javascript",
+				"json",
+				"lua",
+				"markdown",
+				"markdown_inline",
+				"python",
+				"r",
+				"rust",
+				"svelte",
+				"tsx",
+				"typescript",
+				"vim",
+				"vimdoc",
+				"yaml",
+			})
+		else
+			vim.notify("tree-sitter CLI not found; skipping parser install", vim.log.levels.WARN)
+		end
 
 		vim.treesitter.language.register("groovy", "nextflow")
 
