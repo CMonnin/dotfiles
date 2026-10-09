@@ -1,6 +1,3 @@
-# Cobralab shared bashrc. Sourced rather than symlinked (the lab's
-# `ln -sf ... ~/.bashrc`) so the additions below don't get written into the
-# shared file; lab updates are still picked up on every new shell.
 COBRALAB_BASHRC=/project/rrg-mchakrav-ab/gdevenyi/quarantine/cobralab-bashrc
 # Setting HISTFILESIZE truncates $HISTFILE on the spot, so if the lab file sets
 # it, ~/.bash_history would be cut down every shell before the unlimited
