@@ -39,3 +39,7 @@ picom --config ~/.config/picom/picom.conf --daemon &
 
 # Bar
 polybar main &
+
+# Lab mail alerts (bighog smartd/cron -> ~/Maildir), see homelab hosts/bigdaddy/30-mail-inbox.sh
+pgrep -x dunst > /dev/null || dunst &
+pgrep -x mail-notify > /dev/null || mail-notify &
