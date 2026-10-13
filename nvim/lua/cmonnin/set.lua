@@ -19,10 +19,13 @@ vim.opt.scrolloff = 999
 
 -- ...except in diff mode, where centering the cursor fights scrollbind and
 -- the two panes drift out of alignment.
-vim.api.nvim_create_autocmd("OptionSet", {
-	pattern = "diff",
+-- 'diff' is set by `nvim -d` and :diffthis without firing OptionSet, so the
+-- windows are checked whenever a diff is computed or a window is entered
+vim.api.nvim_create_autocmd({ "DiffUpdated", "WinEnter", "BufWinEnter" }, {
 	callback = function()
-		vim.wo.scrolloff = vim.wo.diff and 0 or 999
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			vim.wo[win].scrolloff = vim.wo[win].diff and 0 or 999
+		end
 	end,
 })
 
