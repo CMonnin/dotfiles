@@ -20,6 +20,17 @@ return {
 				python = { "isort", "ruff_format" },
 				rust = { "rustfmt" },
 			},
+			formatters = {
+				prettier = {
+					-- Reflow markdown prose to 80 cols (other filetypes untouched)
+					prepend_args = function(_, ctx)
+						if vim.bo[ctx.buf].filetype == "markdown" then
+							return { "--prose-wrap", "always", "--print-width", "80" }
+						end
+						return {}
+					end,
+				},
+			},
 			format_on_save = {
 				lsp_fallback = false,
 				async = false,

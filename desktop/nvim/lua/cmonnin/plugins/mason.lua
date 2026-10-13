@@ -45,6 +45,7 @@ return {
 				"stylua", -- lua formatter
 				"isort", -- python formatter
 				"eslint_d",
+				"shellcheck", -- used by bashls for diagnostics
 			},
 		})
 	end,
